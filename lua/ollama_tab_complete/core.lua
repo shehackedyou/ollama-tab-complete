@@ -47,7 +47,7 @@ function M.register_commands()
     desc = 'Send a prompt to Ollama and insert code',
   })
   vim.api.nvim_create_user_command('OllamaHistory', M.handle_history_command, {
-    nargs = '0',
+    nargs = '*',
     desc = 'Show Ollama Prompt History',
   })
 end
