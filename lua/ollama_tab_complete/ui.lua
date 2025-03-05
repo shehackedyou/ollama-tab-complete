@@ -1,12 +1,13 @@
 -- lua/ollama_tab_complete/lua/ollama_tab_complete/ui.lua
 
 local config = require('ollama_tab_complete.config')
+local UI_TEXT = config.config.ui_text
 
 local M = {}
 
 local current_ghost_text_id = nil
 local virtual_text_hl_group = "OllamaInlineSuggestion"
-local statusline_indicator_text = config.config.ui_text.status_ready
+local statusline_indicator_text = UI_TEXT.status_ready
 local statusline_error_indicator = ""
 M.automatic_completion_debounce = nil
 local ghost_text_lines = {}
@@ -20,7 +21,7 @@ function M.ensure_highlight_group()
   if not group_exists then
     vim.api.nvim_command("highlight! link " .. virtual_text_hl_group .. " Comment")
   end
-  M.ensure_notification_highlights() -- Ensure notification highlights are created
+  M.ensure_notification_highlights()
 end
 
 
@@ -31,10 +32,22 @@ function M.ensure_notification_highlights()
 end
 
 
-function M.show_ghost_text(code_text)
-  M.clear_ghost_text()
+-- Helper functions for notifications (DRY - Encapsulate vim.notify calls) (No changes)
+function M.notify_info(message)
+  vim.notify(message, vim.log.levels.INFO, { title = "Ollama Tab Complete", highlight = "OllamaNotifyInfo" })
+end
 
-  local lines = vim.split(code_text, '\n')
+function M.notify_warn(message)
+  vim.notify(message, vim.log.levels.WARN, { title = "Ollama Tab Complete", highlight = "OllamaNotifyWarn" })
+end
+
+function M.notify_error(message)
+  vim.notify(message, vim.log.levels.ERROR, { title = "Ollama Tab Complete", highlight = "OllamaNotifyError" })
+end
+
+
+function M.show_ghost_text(completion_text)
+  local lines = vim.split(completion_text, '\n')
   vim.ui.select(lines, {
     prompt = "Ollama Completion:",
     format_item = function(item) return item end,
@@ -60,7 +73,7 @@ function M.clear_inline_suggestion()
 end
 
 
-function M.accept_inline_suggestion()
+function M.accept_ghost_text()
   if current_ghost_text then
     local code_text = current_ghost_text.code_text
     M.clear_inline_suggestion() -- Clear virtual text
@@ -70,7 +83,7 @@ function M.accept_inline_suggestion()
 end
 
 
-function M.retry_inline_suggestion()
+function M.retry_ghost_text()
   if current_ghost_text then
     M.clear_inline_suggestion() -- Clear current suggestion
     -- Re-trigger function generation based on the last comment line and comment text

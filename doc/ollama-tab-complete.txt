@@ -11,22 +11,22 @@ QUICK START                                     *ollama-tab-complete-quickstart*
 <+help_doc_quickstart+>
 
 ==============================================================================
-USAGE                                           *ollama-tab-complete.txt-usage*
+USAGE                                           *ollama-complete.txt-usage*
 
 <+help_doc_usage+>
 
 ==============================================================================
-CONFIGURATION OPTIONS                         *ollama-tab-complete-config*
+CONFIGURATION OPTIONS                         *ollama-complete-config*
 
 <+help_doc_config_options+>
 
 ==============================================================================
-HISTORY                                         *ollama-tab-complete-history*
+HISTORY                                         *ollama-complete-history*
 
 <+help_doc_history+>
 
 ==============================================================================
-LICENSE                                         *ollama-tab-complete-license*
+LICENSE                                         *ollama-complete-license*
 
 <+help_doc_license+>
 

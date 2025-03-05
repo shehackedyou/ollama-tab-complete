@@ -7,7 +7,7 @@ local function make_api_request(request_options, callback)
   local data = vim.json.encode({
     model = request_options.model,
     prompt = request_options.prompt,
-    stream = request_options.stream,
+    stream = false,
   })
 
   local cmd = {
@@ -22,8 +22,6 @@ local function make_api_request(request_options, callback)
 
   local handle = io.popen(cmd_string .. " 2>&1") -- **NEW: Redirect stderr to stdout for combined output**
   if not handle then
-    local error_message = "Failed to start curl process."
-    vim.log.error(error_message .. " Command: " .. cmd_string)
     callback(nil, "Failed to start curl process")
     return
   end
@@ -39,23 +37,14 @@ local function make_api_request(request_options, callback)
 
 
   if exit_code ~= 0 then
-    local error_message = "Ollama API request failed"
-    if http_status_code then
-      error_message = error_message .. " with HTTP status code: " .. http_status_code
-    end
-    error_message = error_message .. ". Exit code: " .. exit_code .. ". Response body: " .. response_body
-
-    vim.log.error("Ollama API Error: " .. error_message .. ". Command: " .. cmd_string)
-    callback(nil, error_message)
+    callback(nil, "curl command failed with exit code: " .. exit_code .. ". Response: " .. response_body)
     return
   end
 
   local response
   local success, err = pcall(vim.json.decode, response_body)
   if not success then
-    local error_message = "Failed to decode JSON response: " .. err .. ". Response body: " .. response_body
-    vim.log.error("JSON Decode Error: " .. error_message .. ". Response body: " .. response_body)
-    callback(nil, error_message)
+    callback(nil, "Failed to decode JSON response: " .. err .. ". Response body: " .. response_body)
     return
   end
   response = err
@@ -71,13 +60,12 @@ end
 
 function M.request_completion(prompt, config, callback, stream)
   local request_options = { -- Group request options in a table
-    model = config.model_name,
+    model = config.config.model_name,
     prompt = prompt,
     stream = stream, -- Use stream parameter
-    url = config.ollama_url,
+    url = config.config.ollama_url,
   }
   make_api_request(request_options, callback) -- Call the reusable request function
 end
 
 return M
-

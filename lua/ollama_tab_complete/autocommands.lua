@@ -14,7 +14,7 @@ function M.setup_autocommands(core_module, ui_module, prompt_module, completion_
     pattern = "*",
   })
   vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
-    group = vim.api.nvim_create_augroup("OllamaCompleteGhostTextClear", { clear = true }),
+    group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
     callback = ui_module.clear_ghost_text,
     pattern = "*",
   })
