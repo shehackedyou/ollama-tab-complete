@@ -16,13 +16,13 @@ local ghost_text_lines = {}
 local UI_TEXT = config.config.ui_text
 
 
-function M.ensure_highlight_group()
-  local group_exists = vim.api.nvim_get_hl_id(virtual_text_hl_group) ~= 0
-  if not group_exists then
-    vim.api.nvim_command("highlight! link " .. virtual_text_hl_group .. " Comment")
-  end
-  M.ensure_notification_highlights()
-end
+--function M.ensure_highlight_group()
+--  local group_exists = vim.api.nvim_get_hl_id(virtual_text_hl_group) ~= 0
+--  if not group_exists then
+--    vim.api.nvim_command("highlight! link " .. virtual_text_hl_group .. " Comment")
+--  end
+--  M.ensure_notification_highlights()
+--end
 
 
 function M.ensure_notification_highlights()

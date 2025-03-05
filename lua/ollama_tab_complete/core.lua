@@ -26,9 +26,9 @@ local automatic_completion_debounce = nil
 
 function M.setup(user_config)
   config.setup(user_config)
-  M.map_keys()
+  --M.map_keys()
   M.register_commands()
-  M.setup_autocommands()
+  --M.setup_autocommands()
   ui.ensure_highlight_group()
   lifecycle.check_and_start_ollama()
   lifecycle.setup_shutdown_autocommand()
@@ -62,26 +62,26 @@ function M.register_commands()
 end
 
 
-function M.setup_autocommands()
-  vim.api.nvim_create_autocmd("TextChangedI", {
-    group = vim.api.nvim_create_augroup("OllamaTabCompleteTriggers", { clear = true }),
-    callback = M.on_text_changed_for_comment_function,
-    pattern = "*",
-  })
-  vim.api.nvim_create_autocmd("TextChangedI", { -- Automatic Completion Trigger
-    group = "OllamaTabCompleteTriggers",
-    callback = M.on_text_changed_for_auto_completion,
-    pattern = "*",
-  })
-
-
-  vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
-    --group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
-    callback = ui.clear_ghost_text,
-    --pattern = "*",
-  })
-
-end
+--function M.setup_autocommands()
+--  vim.api.nvim_create_autocmd("TextChangedI", {
+--    group = vim.api.nvim_create_augroup("OllamaTabCompleteTriggers", { clear = true }),
+--    callback = M.on_text_changed_for_comment_function,
+--    pattern = "*",
+--  })
+--  vim.api.nvim_create_autocmd("TextChangedI", { -- Automatic Completion Trigger
+--    group = "OllamaTabCompleteTriggers",
+--    callback = M.on_text_changed_for_auto_completion,
+--    pattern = "*",
+--  })
+--
+--
+--  vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
+--    group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
+--    callback = ui.clear_ghost_text,
+--    pattern = "*",
+--  })
+--
+--end
 
 
 function M.on_text_changed_for_comment_function()
