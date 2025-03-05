@@ -39,11 +39,11 @@ function M.setup(user_config)
   completion.setup_completion_menu()
 end
 
-function M.map_keys()
-  vim.keymap.set('n', config.config.trigger_key, M.trigger_completion, { desc = "Trigger Ollama Completion" })
-  vim.keymap.set('i', '<Tab>', ui.accept_ghost_text, { desc = "Accept Ollama Ghost Text", silent = true, noremap = true })
-  vim.keymap.set('i', '<S-Tab>', ui.retry_ghost_text, { desc = "Retry Ollama Ghost Text", silent = true, noremap = true })
-end
+--function M.map_keys()
+--  vim.keymap.set('n', config.config.trigger_key, M.trigger_completion, { desc = "Trigger Ollama Completion" })
+--  vim.keymap.set('i', '<Tab>', ui.accept_ghost_text, { desc = "Accept Ollama Ghost Text", silent = true, noremap = true })
+--  vim.keymap.set('i', '<S-Tab>', ui.retry_ghost_text, { desc = "Retry Ollama Ghost Text", silent = true, noremap = true })
+--end
 
 
 function M.register_commands()
