@@ -32,7 +32,7 @@ function M.setup(user_config)
   --ui.ensure_highlight_group()
   lifecycle.check_and_start_ollama()
   lifecycle.setup_shutdown_autocommand()
-  lifecycle.register_signal_handler()
+  --lifecycle.register_signal_handler()
 
   ui.setup_statusline()
   ui.set_statusline_indicator_text(UI_TEXT.status_idle)
