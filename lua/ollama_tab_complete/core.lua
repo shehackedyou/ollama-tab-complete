@@ -189,6 +189,7 @@ function M.handle_prompt_code_command(line)
       ui.set_statusline_error_indicator(UI_TEXT.status_error)
       ui.notify_error(UI_TEXT.prompt_code_failed)
     end
+    )}, { code_only = true })
 end
 
 
