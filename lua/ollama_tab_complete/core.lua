@@ -76,17 +76,10 @@ function M.setup_autocommands()
 
 
   vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
-  -- group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }), -- Commented out group option
-  command = 'echom "Test Autocommand (BufEnter event)"', -- Using command option
-  --  
-  -- pattern = "*", -- Commented out pattern option
-})
-
---  vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
---    --group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
---    callback = ui.clear_ghost_text,
---    --pattern = "*",
---  })
+    --group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
+    callback = ui.clear_ghost_text,
+    --pattern = "*",
+  })
 
 end
 
