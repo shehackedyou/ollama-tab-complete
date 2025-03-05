@@ -181,15 +181,15 @@ function M.handle_prompt_code_command(line)
   M.wakeup_model()
   ui.set_statusline_indicator_text(UI_TEXT.status_prompting)
   local prompt_text = line
-  M.send_prompt(prompt_text, function(completion, error_message)
-    if completion then
-      ui.insert_code_into_buffer(completion)
-      ui.set_statusline_indicator_text(UI_TEXT.status_ready)
-    else
-      ui.set_statusline_error_indicator(UI_TEXT.status_error)
-      ui.notify_error(UI_TEXT.prompt_code_failed)
-    end
-    }, { code_only = true })
+  --M.send_prompt(prompt_text, function(completion, error_message)
+  --  if completion then
+  --    ui.insert_code_into_buffer(completion)
+  --    ui.set_statusline_indicator_text(UI_TEXT.status_ready)
+  --  else
+  --    ui.set_statusline_error_indicator(UI_TEXT.status_error)
+  --    ui.notify_error(UI_TEXT.prompt_code_failed)
+  --  end
+  --  }, { code_only = true })
 end
 
 
