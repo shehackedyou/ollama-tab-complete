@@ -10,7 +10,7 @@ local ollama_server_job_id = nil -- Track Ollama server job ID for graceful shut
 
 function M.check_and_start_ollama()
   if not config.config.automatic_ollama_startup then
-    vim.log.info("Automatic Ollama startup disabled by configuration.")
+    --vim.log.info("Automatic Ollama startup disabled by configuration.")
     return
   end
 
