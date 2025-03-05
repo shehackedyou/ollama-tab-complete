@@ -64,11 +64,13 @@ function M.setup_autocommands()
     callback = M.on_text_changed_for_auto_completion,
     pattern = "*",
   })
+
   vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
     group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
     callback = ui.clear_ghost_text,
     pattern = "*",
   })
+
 end
 
 
@@ -179,70 +181,70 @@ end
 
 -- Command handler for :PromptCode (insert code directly)
 --function M.handle_prompt_code_command(line)
---  M.wakeup_model()
---  ui.set_statusline_indicator_text(UI_TEXT.status_prompting)
---  local prompt_text = line
---  M.send_prompt(prompt_text, function(completion, error_message)
---    if completion then
---      ui.insert_code_into_buffer(completion)
---      ui.set_statusline_indicator_text(UI_TEXT.status_ready)
---    else
---      ui.set_statusline_error_indicator(UI_TEXT.status_error)
---      ui.notify_error(UI_TEXT.prompt_code_failed)
---    end
---    }, { code_only = true })
---end
+  --  M.wakeup_model()
+  --  ui.set_statusline_indicator_text(UI_TEXT.status_prompting)
+  --  local prompt_text = line
+  --  M.send_prompt(prompt_text, function(completion, error_message)
+    --    if completion then
+    --      ui.insert_code_into_buffer(completion)
+    --      ui.set_statusline_indicator_text(UI_TEXT.status_ready)
+    --    else
+    --      ui.set_statusline_error_indicator(UI_TEXT.status_error)
+    --      ui.notify_error(UI_TEXT.prompt_code_failed)
+    --    end
+    --    }, { code_only = true })
+    --end
 
-function M.handle_prompt_code_command(line)
-  M.wakeup_model()
-  ui.set_statusline_indicator_text(UI_TEXT.status_generating)
-  local prompt_text = line
-  local prompt_options = { code_only = true } -- Options table assigned to variable
-  M.send_prompt(prompt_text, handle_prompt_code_response, prompt_options) -- Call send_prompt with named callback and options variable
-end
+    function M.handle_prompt_code_command(line)
+      M.wakeup_model()
+      ui.set_statusline_indicator_text(UI_TEXT.status_generating)
+      local prompt_text = line
+      local prompt_options = { code_only = true } -- Options table assigned to variable
+      M.send_prompt(prompt_text, handle_prompt_code_response, prompt_options) -- Call send_prompt with named callback and options variable
+    end
 
-local function handle_prompt_code_response(completion, error_message)
-  if completion then
-    ui.insert_code_into_buffer(completion)
-    ui.set_statusline_indicator_text(UI_TEXT.status_ready)
-  else
-    ui.set_statusline_error_indicator(UI_TEXT.status_error)
-    ui.notify_error(UI_TEXT.prompt_code_failed)
-  end
-end
-
-
--- Command handler for :OllamaHistory
-function M.handle_history_command(opts)
-  M.wakeup_model()
-  ui.set_statusline_indicator_text(UI_TEXT.status_history_loading)
-  prompt.handle_history_command(ui, opts, M)
-  ui.set_statusline_indicator_text(UI_TEXT.status_ready)
-end
+    local function handle_prompt_code_response(completion, error_message)
+      if completion then
+        ui.insert_code_into_buffer(completion)
+        ui.set_statusline_indicator_text(UI_TEXT.status_ready)
+      else
+        ui.set_statusline_error_indicator(UI_TEXT.status_error)
+        ui.notify_error(UI_TEXT.prompt_code_failed)
+      end
+    end
 
 
--- Function to retry ghost text (Shift+Tab)
-function M.retry_ghost_text()
-  M.wakeup_model()
-  ui.set_statusline_indicator_text(UI_TEXT.status_function_completion)
-  if ui.current_ghost_text_id then
-    ui.clear_ghost_text()
-    M.on_text_changed_for_comment_function()
-  end
-  ui.set_statusline_indicator_text(UI_TEXT.status_ready)
-  return '<S-Tab>'
-end
-
--- Function to detect if the current line is a comment based on filetype (moved to prompt module)
-function M.is_comment_line()
-  return prompt.is_comment_line()
-end
+    -- Command handler for :OllamaHistory
+    function M.handle_history_command(opts)
+      M.wakeup_model()
+      ui.set_statusline_indicator_text(UI_TEXT.status_history_loading)
+      prompt.handle_history_command(ui, opts, M)
+      ui.set_statusline_indicator_text(UI_TEXT.status_ready)
+    end
 
 
--- Function to check if a comment looks like a function description (moved to prompt module)
-function M.is_function_comment(comment_text)
-  return prompt.is_function_comment(comment_text)
-end
+    -- Function to retry ghost text (Shift+Tab)
+    function M.retry_ghost_text()
+      M.wakeup_model()
+      ui.set_statusline_indicator_text(UI_TEXT.status_function_completion)
+      if ui.current_ghost_text_id then
+        ui.clear_ghost_text()
+        M.on_text_changed_for_comment_function()
+      end
+      ui.set_statusline_indicator_text(UI_TEXT.status_ready)
+      return '<S-Tab>'
+    end
+
+    -- Function to detect if the current line is a comment based on filetype (moved to prompt module)
+    function M.is_comment_line()
+      return prompt.is_comment_line()
+    end
 
 
-return M
+    -- Function to check if a comment looks like a function description (moved to prompt module)
+      function M.is_function_comment(comment_text)
+        return prompt.is_function_comment(comment_text)
+      end
+
+
+      return M
