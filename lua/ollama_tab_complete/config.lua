@@ -43,45 +43,70 @@ Please provide only the code, without any explanation or surrounding text.]],
     css = "/* ",
     sh = "# ",
     bash = "# ",
-    zsh = "# ",
+    zsh = "-- ", -- Zsh uses Lua style comments, more common in modern configs
     php = { "// ", "/* ", "# " },
     rust = "// ",
   },
-  automatic_ollama_startup = true,
-  automatic_model_startup = true,
-  ollama_command = "ollama serve",
-  model_run_command = "ollama run deepseek-coder-r2",
-  automatic_model_shutdown = true,
-  automatic_server_shutdown = false,
-  model_stop_command = "ollama stop deepseek-coder-r2",
-  ollama_shutdown_command = "pkill ollama serve",
-  prompt_presets = {
+  automatic_ollama_startup = false, -- Disable automatic Ollama startup
+  automatic_model_startup = false,  -- Disable automatic model startup
+  automatic_model_shutdown = true, -- Enable automatic model shutdown on Neovim exit
+  automatic_server_shutdown = false, -- Disable automatic server shutdown (use with caution!)
+  ollama_command = "ollama serve",        -- Customize Ollama serve command
+  model_run_command = "ollama run codellama:7b", -- Customize model run command
+  model_stop_command = "ollama stop codellama:7b", -- Customize model stop command
+  ollama_shutdown_command = "pkill ollama serve", -- Customize server shutdown command (pkill is a forceful example)
+  prompt_presets = { -- Customize or add more prompt presets
     explain_code = {
       command = "Prompt",
       prompt = "Explain the following code:\n{{selection}}",
-      description = "Explain selected code",
+      description = "Explain selected code (popup)",
     },
     refactor_code = {
       command = "PromptCode",
       prompt = "Refactor the following code to be more efficient:\n{{selection}}",
-      description = "Refactor selected code",
+      description = "Refactor selected code (insert)",
     },
     write_tests = {
       command = "PromptCode",
       prompt = "Write unit tests for the following code:\n{{selection}}",
-      description = "Write unit tests for selected code",
+      description = "Write unit tests for selected code (insert)",
     },
+     -- Add more presets here
   },
   automatic_model_sleep_mode = true,
   model_sleep_timeout_ms = 30000,
-  ui_colors = { -- New section: UI Color Palette (Pastel Pinks)
-    info = "#FAD0E9",    -- Pastel Pink - Info messages
-    warn = "#FFB6C1",    -- Light Pink - Warning messages
-    error = "#FF69B4",   -- Hot Pink - Error messages
-    ready = "#FFE4E1",   -- Misty Rose - Ready state
-    generating = "#FFD1DC", -- Light Hot Pink - Generating state
-    sleeping = "#F08080",  -- Light Coral - Sleeping state
-    waking_up = "#FA8072", -- Salmon - Waking Up state
+  ui_colors = { -- Customize the pastel pink color palette
+    info = "#FAD0E9",
+    warn = "#FFB6C1",
+    error = "#FF69B4",
+    ready = "#FFE4E1",
+    generating = "#FFD1DC",
+    sleeping = "#F08080",
+    waking_up = "#FA8072",
+  },
+  ui_text = { -- Centralized UI Text
+    status_ready = "✨ Ollama Ready ✨",
+    status_generating = "💫 MLM Generating... 💫",
+    status_sleeping = "😴 Ollama Sleeping 😴",
+    status_waking_up = "⏳ Ollama Waking Up ⏳",
+    status_error = "⚠️ MLM Error ⚠️",
+    status_idle = "Ollama: Idle",
+    status_completing = "MLM Completing...",
+    status_function_completion = "Function Completion...",
+    status_prompting = "Prompting Ollama...",
+    status_history_loading = "History Loading...",
+    ollama_output_popup_prompt = "Ollama Output:",
+    ollama_prompt_history_popup_prompt = "Ollama Prompt History (latest first):",
+    ollama_completion_popup_prompt = "MLM Completion:",
+    preset_no_visual_selection_warning = "No visual selection made for preset command: ",
+    ollama_returned_empty_completion = "Ollama returned empty or invalid completion.",
+    ollama_returned_invalid_function_code = "Ollama returned empty or invalid function code.",
+    ollama_returned_empty_function_code_on_retry = "Ollama returned empty or invalid function code on retry.",
+    function_generation_from_comment_failed = "Function generation from comment failed: ",
+    function_generation_retry_from_comment_failed = "Function generation retry from comment failed: ",
+    automatic_completion_failed = "Automatic completion failed: ",
+    re_run_prompt_failed = "Re-run prompt failed: ",
+    no_ollama_history_yet = "No Ollama prompt history yet.",
   },
 }
 

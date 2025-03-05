@@ -1,0 +1,34 @@
+*ollama-tab-complete.txt*  Ollama Tab Complete Neovim Plugin
+
+==============================================================================
+INTRODUCTION                                  *ollama-tab-complete.txt-intro*
+
+<+help_doc_intro+>
+
+==============================================================================
+QUICK START                                     *ollama-tab-complete-quickstart*
+
+<+help_doc_quickstart+>
+
+==============================================================================
+USAGE                                           *ollama-tab-complete.txt-usage*
+
+<+help_doc_usage+>
+
+==============================================================================
+CONFIGURATION OPTIONS                         *ollama-tab-complete-config*
+
+<+help_doc_config_options+>
+
+==============================================================================
+HISTORY                                         *ollama-tab-complete-history*
+
+<+help_doc_history+>
+
+==============================================================================
+LICENSE                                         *ollama-tab-complete-license*
+
+<+help_doc_license+>
+
+==============================================================================
+ vim:tw=78:ts=8:noet:ft=help:norl:

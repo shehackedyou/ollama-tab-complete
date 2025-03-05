@@ -74,7 +74,7 @@ function M.check_and_start_model()
         if success then
           vim.notify("Model '" .. config.config.model_name .. "' started successfully.", vim.log.levels.INFO)
         else
-          vim.notify("Failed to start model '" .. config.config.model_name .. "' automatically. Please ensure it's running in Ollama.", vim.log.levels.ERROR)
+          vim.notify("Failed to start model '" .. config.config.model_name .. "' automatically. Please ensure Ollama is running.", vim.log.levels.ERROR)
         end
       end)
     end
@@ -103,6 +103,7 @@ function M.start_model(callback)
     end,
     detach = true, -- Run in background
   })
+  ollama_server_job_id = job_id -- Store job ID when server starts
 end
 
 
@@ -161,27 +162,6 @@ function M.stop_ollama_server_graceful()
 end
 
 
-function M.stop_ollama_server = function() -- Forceful server stop (pkill - same as before, now assigned to alias and stop_ollama_server_forceful)
-  vim.log.warn("Attempting to shut down Ollama server using command: " .. config.config.ollama_shutdown_command .. " (Use automatic_server_shutdown with caution!)")
-  vim.fn.jobstart(config.config.ollama_shutdown_command, { -- Using configurable shutdown command
-    on_exit = function(_, code)
-      if code == 0 then
-        vim.log.info("Ollama server shutdown command executed (exit code: " .. code .. "). Server may have been stopped.")
-      else
-        vim.log.warn("Ollama server shutdown command failed (exit code: " .. code .. "). Server may still be running.")
-      end
-    end,
-    stderr_buffered = true,
-    on_stderr = function(_, data)
-      if data then
-        vim.log.error("Ollama Server Shutdown Error (stderr): " .. table.concat(data))
-      end
-    end,
-    detach = true,
-  })
-end
-
-
 function M.stop_model()
   vim.log.info("Stopping Ollama model '" .. config.config.model_name .. "'...")
   vim.fn.jobstart(config.config.model_stop_command, {
@@ -192,7 +172,7 @@ function M.stop_model()
         vim.log.warn("Failed to stop Ollama model '" .. config.config.model_name .. "' (exit code: " .. code .. ").")
       end
     end,
-    stderr_buffered = true,
+    stderr_buffered = true, -- Capture stderr for potential error logging
     on_stderr = function(_, data)
       if data then
         vim.log.error("Model Stop Error (stderr): " .. table.concat(data))

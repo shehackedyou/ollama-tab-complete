@@ -31,7 +31,7 @@ function M.ensure_notification_highlights()
 end
 
 
-function M.show_ghost_text(code_text, streaming)
+function M.show_ghost_text(code_text)
   M.clear_ghost_text()
 
   local lines = vim.split(code_text, '\n')

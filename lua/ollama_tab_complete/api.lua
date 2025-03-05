@@ -45,7 +45,6 @@ local function make_api_request(request_options, callback)
     end
     error_message = error_message .. ". Exit code: " .. exit_code .. ". Response body: " .. response_body
 
-
     vim.log.error("Ollama API Error: " .. error_message .. ". Command: " .. cmd_string)
     callback(nil, error_message)
     return
@@ -65,9 +64,7 @@ local function make_api_request(request_options, callback)
   if decoded_response and decoded_response.response then
     callback(decoded_response.response)
   else
-    local error_message = "Invalid Ollama response format. Response: " .. response_body
-    vim.log.warn("Invalid Ollama Response Format: " .. error_message)
-    callback(nil, error_message)
+    callback(nil, "Invalid Ollama response format. Response: " .. response_body)
   end
 end
 
