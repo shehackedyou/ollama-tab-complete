@@ -60,10 +60,10 @@ end
 
 function M.request_completion(prompt, config, callback, stream)
   local request_options = { -- Group request options in a table
-    model = config.config.model_name,
+    model = config.model_name,
     prompt = prompt,
     stream = stream, -- Use stream parameter
-    url = config.config.ollama_url,
+    url = config.ollama_url,
   }
   make_api_request(request_options, callback) -- Call the reusable request function
 end

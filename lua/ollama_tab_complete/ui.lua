@@ -32,7 +32,8 @@ function M.ensure_notification_highlights()
 end
 
 
--- Helper functions for notifications (DRY - Encapsulate vim.notify calls) (No changes)
+-- **NEW: Helper functions for notifications (DRY - Encapsulate vim.notify calls)**
+
 function M.notify_info(message)
   vim.notify(message, vim.log.levels.INFO, { title = "Ollama Tab Complete", highlight = "OllamaNotifyInfo" })
 end
@@ -66,9 +67,9 @@ end
 
 
 function M.clear_inline_suggestion()
-  if current_ghost_text then
+  if current_ghost_text_id then
     vim.api.nvim_buf_clear_namespace(0, "ollama_inline_suggestion", 0, -1) -- Clear namespace for the buffer
-    current_ghost_text = nil
+    current_ghost_text_id = nil
   end
 end
 
@@ -126,4 +127,3 @@ end
 
 
 return M
-
