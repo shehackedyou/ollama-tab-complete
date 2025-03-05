@@ -6,7 +6,7 @@ local prompt = require('ollama_tab_complete.prompt')
 local ui = require('ollama_tab_complete.ui')
 local lifecycle = require('ollama_tab_complete.lifecycle')
 local completion = require('ollama_tab_complete.completion')
-local UI_TEXT = config.config.ui_text -- Access UI_TEXT for concise code
+local UI_TEXT = config.config.ui_text
 
 local M = {}
 
@@ -60,12 +60,12 @@ function M.setup_autocommands()
     pattern = "*",
   })
   vim.api.nvim_create_autocmd("TextChangedI", { -- Automatic Completion Trigger
-    group = "OllamaCompleteTriggers",
+    group = "OllamaTabCompleteTriggers",
     callback = M.on_text_changed_for_auto_completion,
     pattern = "*",
   })
   vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI", "InsertLeave", "FocusLost" }, {
-    group = vim.api.nvim_create_augroup("OllamaCompleteGhostTextClear", { clear = true }),
+    group = vim.api.nvim_create_augroup("OllamaTabCompleteGhostTextClear", { clear = true }),
     callback = ui.clear_ghost_text,
     pattern = "*",
   })
@@ -108,6 +108,12 @@ function M.get_context()
 end
 
 
+-- Function to generate the completion prompt using the configurable template
+local function create_completion_prompt(context_data)
+  return prompt.create_completion_prompt(context_data)
+end
+
+
 function M.trigger_completion()
   ui.clear_ghost_text()
   ui.set_statusline_indicator_text(UI_TEXT.status_completing)
@@ -140,7 +146,7 @@ function M.send_prompt(prompt_text, callback, options)
         prompt.add_to_history(final_prompt, completion)
       else
         ui.set_statusline_error_indicator(UI_TEXT.status_error)
-        ui.notify_warn("Ollama Completion Request: No completion received. " .. (error_message or "Please check `:messages` for details.")) -- User notification - suggest checking :messages
+        ui.notify_warn("Ollama Completion Request: No completion received. " .. (error_message or "Please check `:messages` for details."))
       end
     else -- No callback function provided (unlikely scenario, but handle defensively)
       if error_message then
@@ -164,7 +170,7 @@ function M.handle_prompt_command(line)
       ui.set_statusline_indicator_text(UI_TEXT.status_ready)
     else
       ui.set_statusline_error_indicator(UI_TEXT.status_error)
-      ui.notify_error(UI_TEXT.prompt_failed) -- Use ui.notify_error helper
+      ui.notify_error(UI_TEXT.prompt_failed)
     end
   end)
 end
@@ -181,9 +187,8 @@ function M.handle_prompt_code_command(line)
       ui.set_statusline_indicator_text(UI_TEXT.status_ready)
     else
       ui.set_statusline_error_indicator(UI_TEXT.status_error)
-      ui.notify_error(UI_TEXT.prompt_code_failed) -- Use ui.notify_error helper
+      ui.notify_error(UI_TEXT.prompt_code_failed)
     end
-  }, { code_only = true })
 end
 
 
