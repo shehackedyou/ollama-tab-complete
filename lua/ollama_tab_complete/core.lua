@@ -3,7 +3,16 @@
 local config = require('ollama_tab_complete.config')
 local api = require('ollama_tab_complete.api')
 local prompt = require('ollama_tab_complete.prompt')
-local ui = require('ollama_tab_complete.ui')
+
+--local ui = require('ollama_tab_complete.ui')
+
+local ui = {} -- Initially set ui to an empty table
+
+vim.defer_fn(function()
+  ui = require('ollama_tab_complete.ui') -- Delayed require
+  -- ... any other setup code that depends on 'ui' ...
+end, 1) -- Delay for 1 millisecond (adjust if needed, even 0 might work)
+
 local lifecycle = require('ollama_tab_complete.lifecycle')
 local completion = require('ollama_tab_complete.completion')
 local UI_TEXT = config.config.ui_text
