@@ -1,6 +1,8 @@
 -- lua/ollama_tab_complete/lua/ollama_tab_complete/lifecycle.lua
 
 local config = require('ollama_tab_complete.config')
+local ui = require('ollama_tab_complete.ui')
+local UI_TEXT = config.config.ui_text
 
 local M = {}
 
@@ -22,12 +24,12 @@ function M.check_and_start_ollama()
       vim.log.info("Ollama server is not running. Attempting to start...")
       M.start_ollama_server(function(success)
         if success then
-          vim.notify("Ollama server started successfully.", vim.log.levels.INFO)
+          ui.notify_info("Ollama server started successfully.") -- Use ui.notify_info helper
           if config.config.automatic_model_startup then
             M.check_and_start_model()
           end
         else
-          vim.notify("Failed to start Ollama server automatically. Please ensure Ollama is running.", vim.log.levels.ERROR)
+          ui.notify_error("Failed to start Ollama server automatically. Please ensure Ollama is running, hun.") -- Use ui.notify_error helper
         end
       end)
     end
@@ -36,24 +38,19 @@ end
 
 
 function M.is_ollama_running(callback)
-  require('ollama_tab_complete.api').request_completion("Say hi to check model status", config.config, function(_, error) -- Minimal request to check model
-    callback(error == nil) -- No error means model likely responded
-  end)
+  require('ollama_tab_complete.api').request_completion("Say hi to check model status", config.config, callback)
 end
 
 
 function M.start_ollama_server(callback)
   local job_id = vim.fn.jobstart(config.config.ollama_command, { -- Capture job ID
-    on_exit = function(_, code)
-      callback(code == 0) -- Exit code 0 for 'ollama serve' usually means successful startup (in background)
-    end,
-    stderr_buffered = true, -- Capture stderr for potential error logging
-    on_stderr = function(_, data)
+    on_stdout = callback,
+    on_stderr = function(_, data, _, _)
       if data then
         vim.log.error("Ollama Server Start Error (stderr): " .. table.concat(data))
       end
     end,
-    detach = true, -- Run in background
+    detach = true,
   })
   ollama_server_job_id = job_id -- Store job ID when server starts
 end
@@ -72,9 +69,9 @@ function M.check_and_start_model()
       vim.log.info("Model '" .. config.config.model_name .. "' is not running. Attempting to start...")
       M.start_model(function(success)
         if success then
-          vim.notify("Model '" .. config.config.model_name .. "' started successfully.", vim.log.levels.INFO)
+          ui.notify_info("Model '" .. config.config.model_name .. "' started successfully.") -- Use ui.notify_info helper
         else
-          vim.notify("Failed to start model '" .. config.config.model_name .. "' automatically. Please ensure Ollama is running.", vim.log.levels.ERROR)
+          ui.notify_error("Failed to start model '" .. config.config.model_name .. "' automatically. Please ensure it's running in Ollama.") -- Use ui.notify_error helper
         end
       end)
     end
@@ -83,27 +80,21 @@ end
 
 
 function M.is_model_running(callback)
-  require('ollama_tab_complete.api').request_completion("Say hi to check model status", config.config, function(_, error) -- Minimal request to check model
-    callback(error == nil) -- No error means model likely responded
-  end)
+  require('ollama_tab_complete.api').request_completion("Say hi to check model status", config.config, callback)
 end
 
 
 function M.start_model(callback)
   -- Simplified model start - using 'ollama run' command (configurable)
   vim.fn.jobstart(config.config.model_run_command, {
-    on_exit = function(_, code)
-      callback(code == 0) -- Assuming exit code 0 for 'ollama run' means successful startup (in background)
-    end,
-    stderr_buffered = true, -- Capture stderr for potential error logging
-    on_stderr = function(_, data)
+    on_stdout = callback,
+    on_stderr = function(_, data, _, _)
       if data then
         vim.log.error("Model Start Error (stderr): " .. table.concat(data))
       end
     end,
-    detach = true, -- Run in background
+    detach = true,
   })
-  ollama_server_job_id = job_id -- Store job ID when server starts
 end
 
 
@@ -165,17 +156,10 @@ end
 function M.stop_model()
   vim.log.info("Stopping Ollama model '" .. config.config.model_name .. "'...")
   vim.fn.jobstart(config.config.model_stop_command, {
-    on_exit = function(_, code)
-      if code == 0 then
-        vim.log.info("Ollama model '" .. config.config.model_name .. "' stopped successfully.")
-      else
-        vim.log.warn("Failed to stop Ollama model '" .. config.config.model_name .. "' (exit code: " .. code .. ").")
-      end
-    end,
-    stderr_buffered = true, -- Capture stderr for potential error logging
-    on_stderr = function(_, data)
+    on_stdout = callback,
+    on_stderr = function(_, data, _, _)
       if data then
-        vim.log.error("Model Stop Error (stderr): " .. table.concat(data))
+        vim.log.error("Model Start Error (stderr): " .. table.concat(data))
       end
     end,
     detach = true,

@@ -80,3 +80,4 @@ function M.request_completion(prompt, config, callback, stream)
 end
 
 return M
+

@@ -75,7 +75,7 @@ function M.retry_inline_suggestion()
     M.clear_inline_suggestion() -- Clear current suggestion
     -- Re-trigger function generation based on the last comment line and comment text
     if last_comment_line then
-      local line = vim.api.nvim_buf_get_lines(0, last_comment_line - 1, last_comment_line, false)[1] -- Get the comment line again
+      local line = vim.api.nvim_buf_get_lines(0, last_comment_line - 1, last_line, false)[1] -- Get the comment line again
       local comment_prefix = ""
       if vim.bo.filetype == "python" then
         comment_prefix = "# "
